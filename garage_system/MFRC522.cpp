@@ -1,5 +1,4 @@
-#define SS_PIN 10
-#define RST_PIN 5
+#include "MFRC522.h"
  
 MFRC522 mfrc522; // Instance of the class
 MFRC522::MIFARE_Key key; 
@@ -11,7 +10,7 @@ void MFRC522_Init(){
   mfrc522.PCD_Init(SS_PIN,RST_PIN);   //Init MFRC522
 }
 
-boolean Check_Card(){
+bool Check_Card(){
   if(mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial()){  
     return true;
   }

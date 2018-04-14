@@ -1,15 +1,6 @@
-#include <deprecated.h>
-#include <MFRC522.h>
-#include <MFRC522Extended.h>
-#include <require_cpp11.h>
-
-#include <EEPROM.h>
-
-#include <HardwareSerial.h>
+#include <Init.h>
 
 /*******************定义相应的变量************************/
-#define   UID_Size     4
-#define   unsigned char
 byte* CardID;
 /********************************************************/
 void setup() {
