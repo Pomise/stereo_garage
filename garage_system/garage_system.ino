@@ -1,14 +1,42 @@
+#include <deprecated.h>
+#include <MFRC522.h>
+#include <MFRC522Extended.h>
+#include <require_cpp11.h>
+
+#include <EEPROM.h>
+
 #include <HardwareSerial.h>
 
+/*******************定义相应的变量************************/
+#define   UID_Size     4
+#define   unsigned char
+byte* CardID;
+/********************************************************/
 void setup() {
   // put your setup code here, to run once:
   Disk_Init();
-  Serial.begin(19200);
+  Serial.begin(9600);
+  while(!Serial);
+  SPI.begin();
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  while(1){
+    MFRC522_Init();                            //打开IC卡检测。
+    while(1){                               
+      if(Check_Card()){
+        CardID=Get_CardID();
+        Stop_Check;
+        for(char i=0;i<UID_Size;i++){
+          Serial.print(CardID[i] < 0x10 ? " 0" : " ");
+          Serial.print(CardID[i],HEX);
+        }
+        break;
+      }
+      delay(100);
+    }
 
-  Disk1_Move(1,1);
+    
+  }
 
 }
