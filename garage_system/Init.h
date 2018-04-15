@@ -19,6 +19,16 @@ typedef unsigned char byte;
 #define   Disk3_limit   11
 #define   Step_Limit_Max  12
 #define   Step_Limit_Min  13
+#define   Fixture_Front_Limit   16
+#define   Fixture_Back_Limit    17
+/*****************************夹具电机舵机引脚定位******************************/
+#define   Fixture_Motor_1  14
+#define   Fixture_Motor_2  15
+#define   Servo_PIN       18                  //需要一个能输出PWM的引脚。
+#define   Servo_Clamp_angle     90
+#define   Servo_Relax_angle    0
+#define   Fixture_DIR      HIGH
+
 
 /*****************************车库数据定义位************************************/
 #define   Car_Num   30

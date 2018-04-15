@@ -4,32 +4,23 @@
 旋转车库当前车位编号：每个用一个字节存储，记录各个车库当时靠前的车位编号，用于计算需要旋转车库需要经过几次限位开关。
 卡号：用四个字节存储，记录每个车位存车用户的卡号
 ********************************定义变量***************************************/
-byte ParkPort_Table[Car_Num];
+byte Table[Car_Num];
+byte UID_Data[UID_Size]
 
 /********************************读取函数*****************************************/
 
 uchar * Read_Table(){                     
 	for(uchar i=0;i<Car_Num;i++){
-		ParkPort_Table[i] = EEPROM.read(i);
+		Table[i] = EEPROM.read(i);
 	}
 	return ParkPort_Table;
 }
 
-bool Judge_Can(){
-	for(uchar i=0;i<Car_Num;i++){
-		if(ParkPort_Table[i]&0x80 == 0)
-			return true;
+uchar *Read_UID(uchar port){
+	for(uchar i=0;i<UID_Size;i++){
+		UID_Data[i] = EEPROM.read(Car_Num+Park_Num+i*UID_Size);
 	}
-	return false;
-}
-
-uchar Judge_Port(){
-	uchar i=0;
-	for(i=0;i<Car_Num;i++){
-		if(ParkPort_Table[i]&0x80 == 0)
-			break;
-	}
-	return i;
+	return UID_Data;
 }
 
 uchar Read_Current(uchar Garage){
@@ -37,7 +28,7 @@ uchar Read_Current(uchar Garage){
 }
 
 /***************************************写入数据*********************************************/
-bool Write_Port(uchar port,uchar *UID){
+void Write_Data(uchar port,uchar *UID){
 	if(port < Car_Num){
 		EEPROM.write(port,port&0x80);
 		for(uchar i=0;i<UID_Size;i++)
@@ -45,12 +36,19 @@ bool Write_Port(uchar port,uchar *UID){
 		return true;
 	}
 	return false;
+	Read_Table();
 }
 
-bool Write_Current(uchar port){
+void Write_Clear(uchar port){
+	EERPOM.write(port,port&0x7F);
+	Read_Table();
+}
+
+
+void Write_Current(uchar port){
 	uchar Garage;
 	if(port<Car_Num){
-		Garage = port/Garage_Volume+1;
+		Garage = port/Garage_Volume;
 		EEPROM.write(Car_Num+Garage,port);
 		return true;
 	}

@@ -1,5 +1,17 @@
 #include "Move_Control.h"
-/**********************定义圆盘电机运动***********************************/
+
+Servo myservo;
+int pos = 0;
+
+/***********************初始化运动控制************************************/
+void Move_Init(){
+  Disk_Init();
+  Disk_Pause(4);          //暂停所有的圆盘车库
+  Step_Init();
+  Fixture_Init();
+  Fixture_Relax()        //夹具放松。
+
+}
 
 void Disk_Init(){
   pinMode(Disk1_motor_1,OUTPUT);
@@ -18,6 +30,37 @@ void Disk_Init(){
   pinMode(Disk3_limit,HIGH);
 }
 
+void Step_Init(){
+  PinMode(STEP_PIN,OUTPUT);
+  PinMode(DIR_PIN,OUTPUT);
+  PinMode(ENABLE_PIN,OUTPUT);
+  PinMode(Step_Limit_Max,INPUT);
+  PinMode(Step_Limit_Min,INPUT);
+
+  digitalWrite(Step_Limit_Min,HIGH);
+  digitalWrite(Step_Limit_Max,HIGH);
+
+  digitalWrite(STEP_PIN,LOW);
+  digitalWrite(ENABLE_PIN,LOW);
+}
+
+void Fixture_Init(){                       //夹具动力元件初始化。
+  PinMode(Fixture_Motor_1,OUTPUT);
+  PinMode(Fixture_Motor_2,OUTPUT);
+  PinMode(Fixture_Front_Limit,INPUT);
+  PinMode(Fixtreu_Back_Limit,INPUT);
+
+  digitalWrite(Fixture_Front_Limit,HIGH);
+  digitalWrite(Fixtreu_Back_Limit,HIGH);
+}
+
+void Servo_Init(){                        //舵机运动初始化。
+  PinMOde(Servo_PIN,OUTPUT);
+}
+
+/**********************定义圆盘电机运动***********************************/
+
+
 void Disk_Move(uchar port,uchar Dir){
   switch (port){
     case 1:
@@ -35,8 +78,8 @@ void Disk_Move(uchar port,uchar Dir){
   }
 }
 
-void Disk_Pause(uchar port){
-  switch (port){
+void Disk_Pause(uchar Garage){
+  switch (Garage){
     case 1:
       digitalWrite(Disk1_motor_1,HIGH);
       digitalWrite(Disk1_motor_2,HIGH);
@@ -61,19 +104,6 @@ void Disk_Pause(uchar port){
   
 }
 /*********************************步进电机运动***************************************/
-void Step_Init(){
-  PinMode(STEP_PIN,OUTPUT);
-  PinMode(DIR_PIN,OUTPUT);
-  PinMode(ENABLE_PIN,OUTPUT);
-  PinMode(Step_Limit_Max,INPUT);
-  PinMode(Step_Limit_Min,INPUT);
-
-  digitalWrite(Step_Limit_Min,HIGH);
-  digitalWrite(Step_Limit_Max,HIGH);
-
-  digitalWrite(STEP_PIN,LOW);
-  digitalWrite(ENABLE_PIN,LOW);
-}
 void Move_Step(){
   digitalWrite(STEP_PIN,LOW);;
   delayMicroseconds(5);
@@ -87,7 +117,7 @@ bool Can_Up(){
 }
 
 bool Can_Down(){
-  if(digitalRead(Step_Limit_Max) == 0)
+  if(digitalRead(Step_Limit_Min) == 0)
     return false;
   return true;
 }
@@ -100,6 +130,44 @@ void Platform_Ratate(uchar port){
 void Platform_Rest(uchar port){
   
 }
+/*********************************夹具运动控制***************************************/
+void Fixture_Clamp(){
+  mysero.attach(Servo_PIN);
+  for(;pos < Servo_Clamp_angle;pos++){
+    myservo.write(pos);
+    delay(10);
+  }
+}
+
+void Fixture_Relax(){
+  mysero.attach(Servo_PIN);
+  for(;pos> Servo_Relax_angle;pos--){
+    myservo.write(pos);
+  }
+}
+
+void Fixture_Pause(){
+  digitalWrite(Fixture_Motor_1,HIGH);
+  digitalWrite(Fixture_Motor_2,HIGH);
+}
+
+void Fixture_Front(){
+  digitalWrite(Fixture_Motor_1,Fixture_DIR);
+  digitalWrite(Fixture_Motor_2,~Fixture_DIR);
+  while(digitalRead(Fixture_Front_Limit) == LOW){
+    delay(10);
+  }
+  Fixture_Pause();
+}
+
+void Fixture_Back(){
+  digitalWrite(Fixture_Motor_1,~Fixture_DIR);
+  digitalWrite(Fixture_Motor_2,Fixture_DIR);
+  while(digitalRead(Fixture_Back_Limit) == LOW){
+    delay(10);
+  }
+  Fixture_Pause();
+}
 /********************************整体运动****************************************/
 void Move_Up(uchar port){
   uchar Garage = port/Garage_Volume;
@@ -111,8 +179,8 @@ void Move_Up(uchar port){
   bool  Ratate_OK = false;
 
   digitalWrite(DIR_PIN,DIR_DIREC);
+  Disk_Move(Garage ,1);
 
-  Disk_Move(port/Garage_Volume,1);
   while(1){
     if(!Step_OK){
       if(Can_Up()){
@@ -140,6 +208,7 @@ void Move_Up(uchar port){
       break;
     delayMicroseconds(1000);
   }
+  Disk_Pause(Garage);
 }
 
 void Move_Down(){
@@ -151,4 +220,5 @@ void Move_Down(){
       break;
     delayMicroseconds(1000);
   }
+
 }

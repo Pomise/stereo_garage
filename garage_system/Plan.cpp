@@ -5,6 +5,18 @@
 uchar * Park_Table ;
 uchar Current_Port[Park_Num];
 /********************************************************************/
+void Plan_Init(){
+  Park_Table = Read_Table()
+}
+
+void Record_Car_Data(uchar port,uchar *UID){
+  Write_Data(port,UID);
+}
+
+void Record_Garage_Current(uchar Port){
+  Write_Current(Port);
+
+}
 
 uchar Empty_Num(){                         //判断空车位数量
   uchar n=0;
@@ -15,7 +27,7 @@ uchar Empty_Num(){                         //判断空车位数量
   return n;
 }
 
-void Clear_Prot(ucar port){
+void Clear_Port(ucar port){
   Write_clear(port);
 }
 
@@ -39,7 +51,6 @@ uchar Judge_Port(){
 uchar Judge_Current(ucahr Garage){
   return Read_Current(Garage);
 }
-
 
 /**判断是存车还是取车（返回一个数字<Car_Num则是取车，数字为车位号）*******************************/ 
 
