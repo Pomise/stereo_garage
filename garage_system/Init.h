@@ -1,10 +1,5 @@
-#include <HardwareSerial.h>
-#include  "Data_WR.h"
-#include  "MFRC522.h"
-#include  "Move_Control.h"
-#include  "Plan.h"
-
 #define   uchar unsigned char
+typedef unsigned char byte;
 
 /*******************************电机引脚定义位************************************/
 #define   Disk1_motor_1  A0
@@ -29,5 +24,4 @@
 #define   Car_Num   30
 #define   Park_Num  3
 #define   Garage_Volume  Car_Num/Park_Num
-#define   UIN_Size  4
 #define   UID_Size     4

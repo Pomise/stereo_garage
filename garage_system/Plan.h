@@ -1,3 +1,4 @@
+#include "Init.h"
 
 void Data_Update();
 uchar Empty_Num();

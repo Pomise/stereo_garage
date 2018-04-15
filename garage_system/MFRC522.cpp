@@ -1,5 +1,5 @@
 #include "MFRC522.h"
- 
+
 MFRC522 mfrc522; // Instance of the class
 MFRC522::MIFARE_Key key; 
 

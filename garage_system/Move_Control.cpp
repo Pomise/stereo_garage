@@ -1,4 +1,6 @@
+#include "Move_Control.h"
 /**********************定义圆盘电机运动***********************************/
+
 void Disk_Init(){
   pinMode(Disk1_motor_1,OUTPUT);
   pinMode(Disk1_motor_2,OUTPUT);
@@ -14,8 +16,6 @@ void Disk_Init(){
   pinMode(Disk3_motor_2,OUTPUT);
   pinMode(Disk3_limit,INPUT);
   pinMode(Disk3_limit,HIGH);
-}
-}
 }
 
 void Disk_Move(uchar port,uchar Dir){
