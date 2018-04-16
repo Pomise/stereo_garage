@@ -1,3 +1,4 @@
+#include <HardwareSerial.h>
 #include "Init.h"
 #include "Plan.h"
 #include "MFRC522.h"
@@ -34,19 +35,19 @@ void loop() {
     }
     PARK = Juge_UID(CardID);
     if(PARK > Car_Num){        //表示要存车
-      if(Juge_Can()){              //表示可以存车，开始存车运动.
+      if(Judge_Can()){              //表示可以存车，开始存车运动.
         PARK = Judge_Port();          //获取应该停入的停车位。
-        Write_Car_Data(PARK,CardID);      //写入存车数据,并更新停车列表
+        Record_Car_Data(PARK,CardID);      //写入存车数据,并更新停车列表
         Fixture_Clamp();                   //夹具夹紧车.
         Move_Up(PARK);               //平台向上运动，同时相应的车库圆盘旋转。
         Fixture_Front();             //当平台和车库运动完成后夹具将车送往车位。
         Fixture_Relax();             //放松夹具。
         Fixture_Back();                 //夹具返回.
         Move_Down();                    //完成放车运动.
-        Recrd_Garage_Current(PARK);         //记录车库当前停车位变化.整个存车过程完成。
+        Record_Garage_Current(PARK);         //记录车库当前停车位变化.整个存车过程完成。
       }
       else
-        print("NO PARK_PORT");
+        Serial.print("NO PARK_PORT");
     }
     else{                   //表示要取车,当前PARK既是需要取车的车位.
       Clear_Port(PARK);
@@ -56,7 +57,7 @@ void loop() {
       Fixture_Back();
       Move_Down();
       Fixture_Relax();
-      Recrd_Garage_Current(PARK);
+      Record_Garage_Current(PARK);
     }
     delay(1000);
   }

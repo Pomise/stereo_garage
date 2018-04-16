@@ -1,11 +1,12 @@
 #include "Data_WR.h"
+#include "EEPROM.h"
 /*******************************数据结构*****************************************
 车位（0~29）：每个车位用一个字节存储，最高位用于标识是否为空车位，其余用于存放车位编号。
 旋转车库当前车位编号：每个用一个字节存储，记录各个车库当时靠前的车位编号，用于计算需要旋转车库需要经过几次限位开关。
 卡号：用四个字节存储，记录每个车位存车用户的卡号
 ********************************定义变量***************************************/
-byte Table[Car_Num];
-byte UID_Data[UID_Size]
+uchar Table[Car_Num];
+uchar UID_Data[UID_Size];
 
 /********************************读取函数*****************************************/
 
@@ -13,7 +14,7 @@ uchar * Read_Table(){
 	for(uchar i=0;i<Car_Num;i++){
 		Table[i] = EEPROM.read(i);
 	}
-	return ParkPort_Table;
+	return Table;
 }
 
 uchar *Read_UID(uchar port){
@@ -40,7 +41,7 @@ void Write_Data(uchar port,uchar *UID){
 }
 
 void Write_Clear(uchar port){
-	EERPOM.write(port,port&0x7F);
+	EEPROM.write(port,port&0x7F);
 	Read_Table();
 }
 

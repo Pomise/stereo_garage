@@ -6,7 +6,7 @@ uchar * Park_Table ;
 uchar Current_Port[Park_Num];
 /********************************************************************/
 void Plan_Init(){
-  Park_Table = Read_Table()
+  Park_Table = Read_Table();
 }
 
 void Record_Car_Data(uchar port,uchar *UID){
@@ -27,10 +27,9 @@ uchar Empty_Num(){                         //判断空车位数量
   return n;
 }
 
-void Clear_Port(ucar port){
-  Write_clear(port);
+void Clear_Port(uchar port){
+  Write_Clear(port);
 }
-
 
 bool Judge_Can(){                       //判断能否存车
   for(uchar i=0;i<Car_Num;i++){
@@ -41,14 +40,15 @@ bool Judge_Can(){                       //判断能否存车
 }
 
 uchar Judge_Port(){
-  for(uchar i=0;i<Car_Num;i++){
+  uchar i;
+  for(i=0;i<Car_Num;i++){
     if(Park_Table[i]&0x80 == 0)
       break;
   }
   return Park_Table[i]&0x7F;
 }
 
-uchar Judge_Current(ucahr Garage){
+uchar Judge_Current(uchar Garage){
   return Read_Current(Garage);
 }
 
@@ -59,7 +59,7 @@ uchar Juge_UID(uchar * ID){
   uchar i;
   for(i=0;i<Car_Num;i++){
     if(Park_Table[i]&0x80 == 1){
-      Temp_ID = Read_UID(i)
+      Temp_ID = Read_UID(i);
       for(uchar j=0;j< UID_Size;j++){
         if(Temp_ID[j] == ID[j]){
           if (j == UID_Size-1)

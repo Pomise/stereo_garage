@@ -1,3 +1,4 @@
+#include <SPI.h>
 #include <deprecated.h>
 #include <MFRC522.h>
 #include <MFRC522Extended.h>

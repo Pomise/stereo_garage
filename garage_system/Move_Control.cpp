@@ -1,4 +1,7 @@
 #include "Move_Control.h"
+#include "Plan.h"
+#include <Servo.h>
+#include <Arduino.h>
 
 Servo myservo;
 int pos = 0;
@@ -9,7 +12,7 @@ void Move_Init(){
   Disk_Pause(4);          //暂停所有的圆盘车库
   Step_Init();
   Fixture_Init();
-  Fixture_Relax()        //夹具放松。
+  Fixture_Relax();        //夹具放松。
 
 }
 
@@ -31,11 +34,11 @@ void Disk_Init(){
 }
 
 void Step_Init(){
-  PinMode(STEP_PIN,OUTPUT);
-  PinMode(DIR_PIN,OUTPUT);
-  PinMode(ENABLE_PIN,OUTPUT);
-  PinMode(Step_Limit_Max,INPUT);
-  PinMode(Step_Limit_Min,INPUT);
+  pinMode(STEP_PIN,OUTPUT);
+  pinMode(DIR_PIN,OUTPUT);
+  pinMode(ENABLE_PIN,OUTPUT);
+  pinMode(Step_Limit_Max,INPUT);
+  pinMode(Step_Limit_Min,INPUT);
 
   digitalWrite(Step_Limit_Min,HIGH);
   digitalWrite(Step_Limit_Max,HIGH);
@@ -45,17 +48,17 @@ void Step_Init(){
 }
 
 void Fixture_Init(){                       //夹具动力元件初始化。
-  PinMode(Fixture_Motor_1,OUTPUT);
-  PinMode(Fixture_Motor_2,OUTPUT);
-  PinMode(Fixture_Front_Limit,INPUT);
-  PinMode(Fixtreu_Back_Limit,INPUT);
+  pinMode(Fixture_Motor_1,OUTPUT);
+  pinMode(Fixture_Motor_2,OUTPUT);
+  pinMode(Fixture_Front_Limit,INPUT);
+  pinMode(Fixture_Back_Limit,INPUT);
 
   digitalWrite(Fixture_Front_Limit,HIGH);
-  digitalWrite(Fixtreu_Back_Limit,HIGH);
+  digitalWrite(Fixture_Back_Limit,HIGH);
 }
 
 void Servo_Init(){                        //舵机运动初始化。
-  PinMOde(Servo_PIN,OUTPUT);
+  pinMode(Servo_PIN,OUTPUT);
 }
 
 /**********************定义圆盘电机运动***********************************/
@@ -132,7 +135,7 @@ void Platform_Rest(uchar port){
 }
 /*********************************夹具运动控制***************************************/
 void Fixture_Clamp(){
-  mysero.attach(Servo_PIN);
+  myservo.attach(Servo_PIN);
   for(;pos < Servo_Clamp_angle;pos++){
     myservo.write(pos);
     delay(10);
@@ -140,7 +143,7 @@ void Fixture_Clamp(){
 }
 
 void Fixture_Relax(){
-  mysero.attach(Servo_PIN);
+  myservo.attach(Servo_PIN);
   for(;pos> Servo_Relax_angle;pos--){
     myservo.write(pos);
   }
@@ -172,7 +175,7 @@ void Fixture_Back(){
 void Move_Up(uchar port){
   uchar Garage = port/Garage_Volume;
   uchar n = 0;
-  uchar Limit_Need = port-Read_Current(Garage);
+  uchar Limit_Need = port-Judge_Current(Garage);
   uchar Limit_Num = 0;
   uchar Limit_Flag =  0;
   bool  Step_OK = false;
@@ -184,16 +187,16 @@ void Move_Up(uchar port){
   while(1){
     if(!Step_OK){
       if(Can_Up()){
-        Move_Step()
+        Move_Step();
       }
       else
-        Step_OK = true
+        Step_OK = true;
     }
     if(!Ratate_OK){
       if(digitalRead(Disk1_limit+Garage) == Limit_Flag){
         Limit_Flag = ~Limit_Flag;
         n++;
-        if(n == 2) = {
+        if(n == 2){
           n = 0;
           Limit_Num ++;
           if(Limit_Need == Limit_Num)
