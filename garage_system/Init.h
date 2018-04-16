@@ -1,6 +1,5 @@
-#define   uchar unsigned char
 typedef unsigned char byte;
-
+#define uchar unsigned char
 /*******************************电机引脚定义位************************************/
 #define   Disk1_motor_1  A0
 #define   Disk1_motor_2  A1

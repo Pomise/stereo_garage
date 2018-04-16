@@ -3,7 +3,8 @@
 
 
 uchar* Read_Table();
-bool Judge_Can();
-uchar Judge_Port();
-bool Write_Port(uchar port,uchar *UID);
-bool Write_Current(uchar port);
+uchar *Read_UID(uchar port);
+uchar Read_Current(uchar Garage);
+void Write_Data(uchar port,uchar *UID);
+void Write_Clear(uchar port);
+void Write_Current(uchar port);
