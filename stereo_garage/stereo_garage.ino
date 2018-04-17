@@ -1,61 +1,38 @@
 #include <HardwareSerial.h>
-
-//our command string
-#define COMMAND_SIZE 128
-char palabra[COMMAND_SIZE];
-byte serial_count;
-int no_data = 0;
+#include "Init.h"
+#include "Move_Control.h"
 
 void setup()
 {
 	//Do startup stuff here
 	Serial.begin(19200);
 	Serial.println("start");
-	
-	//other initialization.
-	init_process_string();
-	init_steppers();
-	
+	Move_Init();
 }
 
 void loop()
 {
-	char c;
-	
-	//keep it hot!
-
-
-	//read in characters if we got them.
-	if (Serial.available() > 0)
-	{
-		c = Serial.read();
-		no_data = 0;
-		
-		//newlines are ends of commands.
-		if (c != '\n')
-		{
-			palabra[serial_count] = c;
-			serial_count++;
-		}
+	if(Chose_Front()){
+    Serial.println("Move Front");
+		Move_Front();
+   Serial.println("Front Over");
 	}
-	//mark no data.
-	else
-	{
-		no_data++;
-		delayMicroseconds(100);
+	if(Chose_Back()){
+  Serial.println("Move Back");
+		Move_Back();
+    Serial.println("Back Over");
 	}
+	delay(200);
+}
 
-	//if theres a pause or we got a real command, do it
-	if (serial_count && (c == '\n' || no_data > 100))
-	{
-		//process our command!
-		process_string(palabra, serial_count);
+bool Chose_Front(){
+	if(digitalRead(FRONT) == Limit_Invert_Mask)
+		return true;
+	return  false;
+}
 
-		//clear command.
-		init_process_string();
-	}
-
-	//no data?  turn off steppers
-	if (no_data > 1000)
-	  disable_steppers();
+bool Chose_Back(){
+	if(digitalRead(BACK) == Limit_Invert_Mask)
+		return true;
+	return  false;
 }

@@ -209,7 +209,7 @@ void Move_Up(uchar port){
       Disk_Pause(Garage);
     if(Step_OK && Ratate_OK)
       break;
-    delayMicroseconds(Speed);
+    delayMicroseconds(1000);
   }
   Disk_Pause(Garage);
 }
