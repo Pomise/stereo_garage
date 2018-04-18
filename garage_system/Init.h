@@ -14,7 +14,7 @@ typedef unsigned char byte;
 #define   DIR_DIREC      HIGH          //用于步进电机置方向
 #define   Speed         1000
 /******************************限位开关引脚定义位*********************************/
-#define   Limit_Invert_Mask  1
+#define   Limit_Invert_Mask  HIGH
 #define   Disk1_limit   9                     //直流电机的限位开关引脚要递增定义,且要用数字引脚
 #define   Disk2_limit   10
 #define   Disk3_limit   11
@@ -26,7 +26,7 @@ typedef unsigned char byte;
 #define   Fixture_Motor_1  14
 #define   Fixture_Motor_2  15
 #define   Servo_PIN       18                  //需要一个能输出PWM的引脚。
-#define   Servo_Clamp_angle     90
+#define   Servo_Clamp_angle     180
 #define   Servo_Relax_angle    0
 #define   Fixture_DIR      HIGH
 

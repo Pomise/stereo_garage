@@ -4,7 +4,7 @@
 #include <Arduino.h>
 
 Servo myservo;
-int pos = 0;
+int pos = Servo_Relax_angle;
 
 /***********************初始化运动控制************************************/
 void Move_Init(){
@@ -12,8 +12,9 @@ void Move_Init(){
   Disk_Pause(4);          //暂停所有的圆盘车库
   Step_Init();
   Fixture_Init();
+  Servo_Init();
   Fixture_Relax();        //夹具放松。
-
+  Fixture_Pause();
 }
 
 void Disk_Init(){
@@ -55,6 +56,8 @@ void Fixture_Init(){                       //夹具动力元件初始化。
 
   digitalWrite(Fixture_Front_Limit,HIGH);
   digitalWrite(Fixture_Back_Limit,HIGH);
+
+  myservo.attach(Servo_PIN);
 }
 
 void Servo_Init(){                        //舵机运动初始化。
@@ -135,18 +138,19 @@ void Platform_Rest(uchar port){
 }
 /*********************************夹具运动控制***************************************/
 void Fixture_Clamp(){
-  myservo.attach(Servo_PIN);
-  for(;pos < Servo_Clamp_angle;pos++){
+  for(;pos <Servo_Clamp_angle;pos++){
     myservo.write(pos);
-    delay(10);
+    delay(20);
   }
+  delay(1000);
 }
 
 void Fixture_Relax(){
-  myservo.attach(Servo_PIN);
-  for(;pos> Servo_Relax_angle;pos--){
+  for(;pos>Servo_Relax_angle;pos--){
     myservo.write(pos);
+    delay(20);
   }
+  delay(1000);
 }
 
 void Fixture_Pause(){
@@ -155,8 +159,8 @@ void Fixture_Pause(){
 }
 
 void Fixture_Front(){
-  digitalWrite(Fixture_Motor_1,Fixture_DIR);
-  digitalWrite(Fixture_Motor_2,~Fixture_DIR);
+  digitalWrite(Fixture_Motor_1,HIGH);
+  digitalWrite(Fixture_Motor_2,LOW);
   while(digitalRead(Fixture_Front_Limit) == Limit_Invert_Mask){
     delay(10);
   }
@@ -164,8 +168,8 @@ void Fixture_Front(){
 }
 
 void Fixture_Back(){
-  digitalWrite(Fixture_Motor_1,~Fixture_DIR);
-  digitalWrite(Fixture_Motor_2,Fixture_DIR);
+  digitalWrite(Fixture_Motor_1,LOW);
+  digitalWrite(Fixture_Motor_2,HIGH);
   while(digitalRead(Fixture_Back_Limit) == Limit_Invert_Mask){
     delay(10);
   }

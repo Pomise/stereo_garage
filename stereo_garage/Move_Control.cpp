@@ -53,7 +53,7 @@ void Move_Front(){
 }
 
 void Move_Back(){
-  digitalWrite(DIR_PIN,~DIR_Invert_Mask);
+  digitalWrite(DIR_PIN,DIR_Invert_Mask_N);
   while(1){
     if(!Can_Back()){
       break;

@@ -15,7 +15,7 @@ void setup() {
   SPI.begin();
   Move_Init();
   Plan_Init();
-  pinMode(Test_Pin);
+  pinMode(Test_Pin,OUTPUT);
   digitalWrite(Test_Pin,HIGH);
 }
 
@@ -23,13 +23,13 @@ void loop() {
   if (digitalRead(Test_Pin) == 0)
   {
     Fixture_Clamp();
+    Serial.print("Clamp OK");
     Fixture_Front();
+    Serial.print("Front OK");
     Fixture_Relax();
-    delay(3000);
+    delay(1000);
     Fixture_Back();
-    delay(3000);
+    delay(1000);
     /* code */
   }
-  delay(500);
-
 }

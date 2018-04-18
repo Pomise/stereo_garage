@@ -156,7 +156,7 @@ void Fixture_Pause(){
 
 void Fixture_Front(){
   digitalWrite(Fixture_Motor_1,Fixture_DIR);
-  digitalWrite(Fixture_Motor_2,~Fixture_DIR);
+  digitalWrite(Fixture_Motor_2,!Fixture_DIR);
   while(digitalRead(Fixture_Front_Limit) == Limit_Invert_Mask){
     delay(10);
   }
@@ -164,7 +164,7 @@ void Fixture_Front(){
 }
 
 void Fixture_Back(){
-  digitalWrite(Fixture_Motor_1,~Fixture_DIR);
+  digitalWrite(Fixture_Motor_1,!Fixture_DIR);
   digitalWrite(Fixture_Motor_2,Fixture_DIR);
   while(digitalRead(Fixture_Back_Limit) == Limit_Invert_Mask){
     delay(10);
@@ -194,7 +194,7 @@ void Move_Up(uchar port){
     }
     if(!Ratate_OK){
       if(digitalRead(Disk1_limit+Garage) == Limit_Flag){
-        Limit_Flag = ~Limit_Flag;
+        Limit_Flag = !Limit_Flag;
         n++;
         if(n == 2){
           n = 0;
@@ -215,7 +215,7 @@ void Move_Up(uchar port){
 }
 
 void Move_Down(){
-  digitalWrite(DIR_PIN,~DIR_DIREC);
+  digitalWrite(DIR_PIN,!DIR_DIREC);
   while(1){
     if(Can_Down())
       Move_Step();
