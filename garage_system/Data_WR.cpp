@@ -19,7 +19,7 @@ uchar * Read_Table(){
 
 uchar *Read_UID(uchar port){
 	for(uchar i=0;i<UID_Size;i++){
-		UID_Data[i] = EEPROM.read(Car_Num+Park_Num+i*UID_Size);
+		UID_Data[i] = EEPROM.read(Car_Num+Park_Num+port*UID_Size+i);
 	}
 	return UID_Data;
 }
@@ -31,12 +31,10 @@ uchar Read_Current(uchar Garage){
 /***************************************写入数据*********************************************/
 void Write_Data(uchar port,uchar *UID){
 	if(port < Car_Num){
-		EEPROM.write(port,port&0x80);
+		EEPROM.write(port,port|0x80);
 		for(uchar i=0;i<UID_Size;i++)
 			EEPROM.write(Car_Num+Park_Num+port*UID_Size+i,UID[i]);
-		return true;
 	}
-	return false;
 	Read_Table();
 }
 

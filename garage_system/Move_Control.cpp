@@ -140,6 +140,7 @@ void Fixture_Clamp(){
     myservo.write(pos);
     delay(10);
   }
+  delay(1000);
 }
 
 void Fixture_Relax(){
@@ -147,6 +148,7 @@ void Fixture_Relax(){
   for(;pos> Servo_Relax_angle;pos--){
     myservo.write(pos);
   }
+  delay(1000);
 }
 
 void Fixture_Pause(){
@@ -157,19 +159,21 @@ void Fixture_Pause(){
 void Fixture_Front(){
   digitalWrite(Fixture_Motor_1,Fixture_DIR);
   digitalWrite(Fixture_Motor_2,!Fixture_DIR);
-  while(digitalRead(Fixture_Front_Limit) == Limit_Invert_Mask){
+  while(digitalRead(Fixture_Front_Limit) == !Limit_Invert_Mask){
     delay(10);
   }
   Fixture_Pause();
+  delay(1000);
 }
 
 void Fixture_Back(){
   digitalWrite(Fixture_Motor_1,!Fixture_DIR);
   digitalWrite(Fixture_Motor_2,Fixture_DIR);
-  while(digitalRead(Fixture_Back_Limit) == Limit_Invert_Mask){
+  while(digitalRead(Fixture_Back_Limit) == !Limit_Invert_Mask){
     delay(10);
   }
   Fixture_Pause();
+  delay(1000);
 }
 /********************************整体运动****************************************/
 void Move_Up(uchar port){
@@ -183,6 +187,8 @@ void Move_Up(uchar port){
 
   digitalWrite(DIR_PIN,DIR_DIREC);
   Disk_Move(Garage ,1);
+  if(Limit_Need == 0)
+    Ratate_OK = true;
 
   while(1){
     if(!Step_OK){
@@ -221,7 +227,7 @@ void Move_Down(){
       Move_Step();
     else
       break;
-    delayMicroseconds(1000);
+    delayMicroseconds(Speed);
   }
 
 }
