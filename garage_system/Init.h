@@ -31,11 +31,13 @@ typedef unsigned char byte;
 #define   Speed         500
 /******************************限位开关引脚定义位*********************************/
 #define   Limit_Invert_Mask  HIGH
-#define   Disk1_limit   25                     //直流电机的限位开关引脚要连续定义,且要用数字引脚
+#define   Disk1_limit   25                    
 #define   Disk2_limit   26
 #define   Disk3_limit   27
 #define   Step_Limit_Max  28
-#define   Step_Limit_Min  29
+#define   Step_Limit_Second 29
+#define   Step_Limit_First  30
+#define   Step_Limit_Min    31
 #define   Fixture_Front_Limit   30
 #define   Fixture_Back_Limit    31
 /*****************************夹具电机舵机引脚定位******************************/

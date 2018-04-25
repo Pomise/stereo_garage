@@ -10,7 +10,7 @@ void Servo_Init();
 void Disk_Move(uchar port,uchar Dir);
 void Disk_Pause(uchar Garage);
 void Move_Step();
-bool Can_Up();
+bool Can_Up(uchar Garage);
 bool Can_Down();
 
 void Platform_Ratate(uchar port);

@@ -38,9 +38,13 @@ void Step_Init(){
   pinMode(DIR_PIN,OUTPUT);
   pinMode(ENABLE_PIN,OUTPUT);
   pinMode(Step_Limit_Max,INPUT);
+  pinMode(Step_Limit_Second,INPUT);
+  pinMode(Step_Limit_First,INPUT);
   pinMode(Step_Limit_Min,INPUT);
 
   digitalWrite(Step_Limit_Min,HIGH);
+  digitalWrite(Step_Limit_First,HIGH);
+  digitalWrite(Step_Limit_Second,HIGH);
   digitalWrite(Step_Limit_Max,HIGH);
 
   digitalWrite(STEP_PIN,LOW);
@@ -83,15 +87,15 @@ void Disk_Move(uchar port,uchar Dir){
 
 void Disk_Pause(uchar Garage){
   switch (Garage){
-    case 1:
+    case 0:
       digitalWrite(Disk1_motor_1,HIGH);
       digitalWrite(Disk1_motor_2,HIGH);
       break;
-    case 2:
+    case 1:
       digitalWrite(Disk2_motor_1,HIGH);
       digitalWrite(Disk2_motor_2,HIGH);
       break;
-    case 3:
+    case 2:
       digitalWrite(Disk3_motor_1,HIGH);
       digitalWrite(Disk3_motor_2,HIGH);
       break;
@@ -106,6 +110,20 @@ void Disk_Pause(uchar Garage){
   }
   
 }
+
+uchar Read_Disk_Limit(uchar Garage){
+  switch (Garage){
+    case 0:
+      return digitalRead(Disk1_limit);
+    case 1:
+      return digitalRead(Disk2_limit);
+    case 2:
+      return digitalRead(Disk3_limit);
+    case 3:
+      return digitalRead(Disk1_limit);
+  }
+  return 0;
+}
 /*********************************步进电机运动***************************************/
 void Move_Step(){
   digitalWrite(STEP_PIN,LOW);;
@@ -113,14 +131,26 @@ void Move_Step(){
   digitalWrite(STEP_PIN,HIGH);
 }
 
-bool Can_Up(){
-  if(digitalRead(Step_Limit_Max) == Limit_Invert_Mask)
-    return false;
+bool Can_Up(uchar Garage){
+  switch (Garage){
+    case 0:
+      if(digitalRead(Step_Limit_First) == !Limit_Invert_Mask)
+        return false;
+      break;
+    case 1:
+      if(digitalRead(Step_Limit_Second)== !Limit_Invert_Mask)
+        return false;
+        break;
+    case 2:
+      if(digitalRead(Step_Limit_Max) == !Limit_Invert_Mask)
+        return false;
+      break;
+  }
   return true;
 }
 
 bool Can_Down(){
-  if(digitalRead(Step_Limit_Min) == Limit_Invert_Mask)
+  if(digitalRead(Step_Limit_Min) == !Limit_Invert_Mask)
     return false;
   return true;
 }
@@ -192,14 +222,14 @@ void Move_Up(uchar port){
 
   while(1){
     if(!Step_OK){
-      if(Can_Up()){
+      if(Can_Up(Garage)){
         Move_Step();
       }
       else
         Step_OK = true;
     }
     if(!Ratate_OK){
-      if(digitalRead(Disk1_limit+Garage) == Limit_Flag){
+      if(Read_Disk_Limit(Garage) == Limit_Flag){
         Limit_Flag = !Limit_Flag;
         n++;
         if(n == 2){
