@@ -13,6 +13,7 @@ void Move_Init(){
   Step_Init();
   Fixture_Init();
   Fixture_Relax();        //夹具放松。
+  void Servo_Init();
 
 }
 
@@ -20,17 +21,17 @@ void Disk_Init(){
   pinMode(Disk1_motor_1,OUTPUT);
   pinMode(Disk1_motor_2,OUTPUT);
   pinMode(Disk1_limit,INPUT);
-  pinMode(Disk1_limit,HIGH);
+  pinMode(Disk1_limit,LOW);
 
   pinMode(Disk2_motor_1,OUTPUT);
   pinMode(Disk2_motor_2,OUTPUT);
   pinMode(Disk2_limit,INPUT);
-  pinMode(Disk2_limit,HIGH);
+  pinMode(Disk2_limit,LOW);
 
   pinMode(Disk3_motor_1,OUTPUT);
   pinMode(Disk3_motor_2,OUTPUT);
   pinMode(Disk3_limit,INPUT);
-  pinMode(Disk3_limit,HIGH);
+  pinMode(Disk3_limit,LOW);
 }
 
 void Step_Init(){
@@ -42,10 +43,10 @@ void Step_Init(){
   pinMode(Step_Limit_First,INPUT);
   pinMode(Step_Limit_Min,INPUT);
 
-  digitalWrite(Step_Limit_Min,HIGH);
-  digitalWrite(Step_Limit_First,HIGH);
-  digitalWrite(Step_Limit_Second,HIGH);
-  digitalWrite(Step_Limit_Max,HIGH);
+  digitalWrite(Step_Limit_Min,LOW);
+  digitalWrite(Step_Limit_First,LOW);
+  digitalWrite(Step_Limit_Second,LOW);
+  digitalWrite(Step_Limit_Max,LOW);
 
   digitalWrite(STEP_PIN,LOW);
   digitalWrite(ENABLE_PIN,LOW);
@@ -57,8 +58,8 @@ void Fixture_Init(){                       //夹具动力元件初始化。
   pinMode(Fixture_Front_Limit,INPUT);
   pinMode(Fixture_Back_Limit,INPUT);
 
-  digitalWrite(Fixture_Front_Limit,HIGH);
-  digitalWrite(Fixture_Back_Limit,HIGH);
+  digitalWrite(Fixture_Front_Limit,LOW);
+  digitalWrite(Fixture_Back_Limit,LOW);
 }
 
 void Servo_Init(){                        //舵机运动初始化。
@@ -88,24 +89,24 @@ void Disk_Move(uchar port,uchar Dir){
 void Disk_Pause(uchar Garage){
   switch (Garage){
     case 0:
-      digitalWrite(Disk1_motor_1,HIGH);
-      digitalWrite(Disk1_motor_2,HIGH);
+      digitalWrite(Disk1_motor_1,Motor_Pause);
+      digitalWrite(Disk1_motor_2,Motor_Pause);
       break;
     case 1:
-      digitalWrite(Disk2_motor_1,HIGH);
-      digitalWrite(Disk2_motor_2,HIGH);
+      digitalWrite(Disk2_motor_1,Motor_Pause);
+      digitalWrite(Disk2_motor_2,Motor_Pause);
       break;
     case 2:
-      digitalWrite(Disk3_motor_1,HIGH);
-      digitalWrite(Disk3_motor_2,HIGH);
+      digitalWrite(Disk3_motor_1,Motor_Pause);
+      digitalWrite(Disk3_motor_2,Motor_Pause);
       break;
     default:
-      digitalWrite(Disk1_motor_1,HIGH);
-      digitalWrite(Disk1_motor_2,HIGH);
-      digitalWrite(Disk2_motor_1,HIGH);
-      digitalWrite(Disk2_motor_2,HIGH);
-      digitalWrite(Disk3_motor_1,HIGH);
-      digitalWrite(Disk3_motor_2,HIGH);
+      digitalWrite(Disk1_motor_1,Motor_Pause);
+      digitalWrite(Disk1_motor_2,Motor_Pause);
+      digitalWrite(Disk2_motor_1,Motor_Pause);
+      digitalWrite(Disk2_motor_2,Motor_Pause);
+      digitalWrite(Disk3_motor_1,Motor_Pause);
+      digitalWrite(Disk3_motor_2,Motor_Pause);
       break;
   }
   
@@ -134,15 +135,15 @@ void Move_Step(){
 bool Can_Up(uchar Garage){
   switch (Garage){
     case 0:
-      if(digitalRead(Step_Limit_First) == !Limit_Invert_Mask)
+      if(digitalRead(Step_Limit_First) == Limit_Invert_Mask)
         return false;
       break;
     case 1:
-      if(digitalRead(Step_Limit_Second)== !Limit_Invert_Mask)
+      if(digitalRead(Step_Limit_Second)== Limit_Invert_Mask)
         return false;
         break;
     case 2:
-      if(digitalRead(Step_Limit_Max) == !Limit_Invert_Mask)
+      if(digitalRead(Step_Limit_Max) == Limit_Invert_Mask)
         return false;
       break;
   }
@@ -150,7 +151,7 @@ bool Can_Up(uchar Garage){
 }
 
 bool Can_Down(){
-  if(digitalRead(Step_Limit_Min) == !Limit_Invert_Mask)
+  if(digitalRead(Step_Limit_Min) == Limit_Invert_Mask)
     return false;
   return true;
 }
@@ -182,8 +183,8 @@ void Fixture_Relax(){
 }
 
 void Fixture_Pause(){
-  digitalWrite(Fixture_Motor_1,HIGH);
-  digitalWrite(Fixture_Motor_2,HIGH);
+  digitalWrite(Fixture_Motor_1,Motor_Pause);
+  digitalWrite(Fixture_Motor_2,Motor_Pause);
 }
 
 void Fixture_Front(){

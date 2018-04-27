@@ -17,32 +17,33 @@ typedef unsigned char byte;
  *
  */
 /*******************************电机引脚定义位************************************/
-#define   Disk1_motor_1  3
-#define   Disk1_motor_2  4
+#define   Motor_Pause    LOW
+#define   Disk1_motor_1  A8
+#define   Disk1_motor_2  A9
 #define   Disk2_motor_1  3
 #define   Disk2_motor_2  4
 #define   Disk3_motor_1  5
 #define   Disk3_motor_2  6
 
-#define   STEP_PIN      22
-#define   DIR_PIN       23
+#define   STEP_PIN      23
+#define   DIR_PIN       22
 #define   ENABLE_PIN    24
-#define   DIR_DIREC      LOW          //用于步进电机置方向
+#define   DIR_DIREC     LOW          //用于步进电机置方向
 #define   Speed         500
 /******************************限位开关引脚定义位*********************************/
-#define   Limit_Invert_Mask  HIGH
-#define   Disk1_limit   25                    
+#define   Limit_Invert_Mask  LOW
+#define   Disk1_limit   A0                    
 #define   Disk2_limit   26
 #define   Disk3_limit   27
-#define   Step_Limit_Max  28
+#define   Step_Limit_Max  30
 #define   Step_Limit_Second 29
-#define   Step_Limit_First  30
-#define   Step_Limit_Min    31
-#define   Fixture_Front_Limit   30
-#define   Fixture_Back_Limit    31
+#define   Step_Limit_First  A1
+#define   Step_Limit_Min    A2
+#define   Fixture_Front_Limit   A3
+#define   Fixture_Back_Limit    A4
 /*****************************夹具电机舵机引脚定位******************************/
-#define   Fixture_Motor_1  32
-#define   Fixture_Motor_2  33
+#define   Fixture_Motor_1  A10
+#define   Fixture_Motor_2  A11
 #define   Servo_PIN       9                  //需要一个能输出PWM的引脚。
 #define   Servo_Clamp_angle     180
 #define   Servo_Relax_angle    0

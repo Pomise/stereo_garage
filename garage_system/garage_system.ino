@@ -3,6 +3,7 @@
 #include "Plan.h"
 #include "MFRC522.h"
 #include "Move_Control.h"
+#include "Data_WR.h"
 
 /*******************定义相应的变量************************/
 byte* CardID;
@@ -13,6 +14,8 @@ void setup() {
   Serial.begin(9600);
   while(!Serial);
   SPI.begin();
+  Serial.print("Start:\n");
+  Clear();
   Move_Init();
   Plan_Init();
 }
@@ -48,7 +51,7 @@ void loop() {
         Serial.print("Move UP\n");
         Record_Garage_Current(PARK);         //记录车库当前停车位变化.整个存车过程完成。
         Fixture_Front();             //当平台和车库运动完成后夹具将车送往车位。
-        Serial.print("Front\n");
+        Serial.print("Fixture Front\n");
         Fixture_Relax();             //放松夹具。
         Serial.print("Fixture Relax\n");
         Fixture_Back();                 //夹具返回.
@@ -66,7 +69,7 @@ void loop() {
       Move_Up(PARK);
       Serial.print("Move_UP OK\n");
       Fixture_Front();
-      Serial.print("Move_Front\n");
+      Serial.print("Fixture Front\n");
       Fixture_Clamp();
       Serial.print("Fixture_Clamp\n");
       Fixture_Back();

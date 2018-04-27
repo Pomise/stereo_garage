@@ -6,6 +6,7 @@
 uchar * Park_Table ;
 uchar Current_Port[Park_Num];
 /********************************************************************/
+
 void Plan_Init(){
   Park_Table = Read_Table();
 }

@@ -9,6 +9,17 @@ uchar Table[Car_Num];
 uchar UID_Data[UID_Size];
 
 /********************************读取函数*****************************************/
+void Clear(){
+	uchar i;
+
+	for(i=0;i<Car_Num*Park_Num;i++){
+		EEPROM.write(i,i);
+	}
+	for(;i<Car_Num*Park_Num+Park_Num;i++){
+		EEPROM.write(i,0x00);
+	}
+}
+
 
 uchar * Read_Table(){                     
 	for(uchar i=0;i<Car_Num;i++){
