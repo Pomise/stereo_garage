@@ -1,14 +1,17 @@
-#define Pin_1 A3
-#define Pin_2 A4
+#include "Init.h"
+#define Pin_1 Fixture_Motor_1
+#define Pin_2 Fixture_Motor_2
+#define Mode   OUTPUT
+#define H_L    LOW
 
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
-  pinMode(Pin_1,INPUT);
-  pinMode(Pin_2,INPUT);
+  pinMode(Pin_1,Mode);
+  pinMode(Pin_2,Mode);
 
-  digitalWrite(Pin_1,LOW);
-  digitalWrite(Pin_2,LOW);
+  digitalWrite(Pin_1,H_L);
+  digitalWrite(Pin_2,HIGH);
 }
 
 void loop() {

@@ -2,6 +2,7 @@
 #include "Plan.h"
 #include <Servo.h>
 #include <Arduino.h>
+#include <math.h>
 
 Servo myservo;
 int pos = 0;
@@ -71,15 +72,15 @@ void Servo_Init(){                        //舵机运动初始化。
 
 void Disk_Move(uchar port,uchar Dir){
   switch (port){
-    case 1:
+    case 0:
       digitalWrite(Disk1_motor_1,Dir);
       digitalWrite(Disk1_motor_2,!Dir);
       break;
-    case 2:
+    case 1:
       digitalWrite(Disk2_motor_1,Dir);
       digitalWrite(Disk2_motor_2,!Dir);
       break;
-    case 3:
+    case 2:
       digitalWrite(Disk3_motor_1,Dir);
       digitalWrite(Disk3_motor_2,!Dir);
       break;
@@ -188,8 +189,8 @@ void Fixture_Pause(){
 }
 
 void Fixture_Front(){
-  digitalWrite(Fixture_Motor_1,Fixture_DIR);
-  digitalWrite(Fixture_Motor_2,!Fixture_DIR);
+  digitalWrite(Fixture_Motor_1,HIGH);
+  digitalWrite(Fixture_Motor_2,LOW);
   while(digitalRead(Fixture_Front_Limit) == !Limit_Invert_Mask){
     delay(10);
   }
@@ -210,25 +211,19 @@ void Fixture_Back(){
 void Move_Up(uchar port){
   uchar Garage = port/Garage_Volume;
   uchar n = 0;
-  uchar Limit_Need = port-Judge_Current(Garage);
+  char Limit_Need = port-Judge_Current(Garage);
+  if(Limit_Need < 0)
+    Limit_Need = Limit_Need + Garage_Volume;
   uchar Limit_Num = 0;
-  uchar Limit_Flag =  Limit_Invert_Mask;
+  uchar Limit_Flag =  !Limit_Invert_Mask;
   bool  Step_OK = false;
   bool  Ratate_OK = false;
 
   digitalWrite(DIR_PIN,DIR_DIREC);
-  Disk_Move(Garage ,1);
   if(Limit_Need == 0)
     Ratate_OK = true;
-
   while(1){
-    if(!Step_OK){
-      if(Can_Up(Garage)){
-        Move_Step();
-      }
-      else
-        Step_OK = true;
-    }
+    Disk_Move(Garage ,1);
     if(!Ratate_OK){
       if(Read_Disk_Limit(Garage) == Limit_Flag){
         Limit_Flag = !Limit_Flag;
@@ -244,11 +239,24 @@ void Move_Up(uchar port){
     }
     else
       Disk_Pause(Garage);
-    if(Step_OK && Ratate_OK)
+    if(Ratate_OK)
       break;
-    delayMicroseconds(Speed);
+    delay(10);
   }
   Disk_Pause(Garage);
+
+  while(1){
+    if(!Step_OK){
+      if(Can_Up(Garage)){
+        Move_Step();
+      }
+      else
+        Step_OK = true;
+    }
+    if(Step_OK)
+      break;
+    delayMicroseconds(Speed);
+   }
 }
 
 void Move_Down(){

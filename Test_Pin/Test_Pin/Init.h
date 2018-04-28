@@ -17,7 +17,7 @@ typedef unsigned char byte;
  *
  */
 /*******************************电机引脚定义位************************************/
-#define   Motor_Pause    HIGH
+#define   Motor_Pause    LOW
 #define   Disk1_motor_1  A8
 #define   Disk1_motor_2  A9
 #define   Disk2_motor_1  3
