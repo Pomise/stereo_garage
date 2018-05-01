@@ -1,6 +1,8 @@
 #include "Init.h"
-#define Pin_1 Fixture_Motor_1
-#define Pin_2 Fixture_Motor_2
+#define Pin_1 Disk1_motor_1
+#define Pin_2 Disk1_motor_2
+#define Pin_3 Disk1_Enable
+#define Pin_4
 #define Mode   OUTPUT
 #define H_L    LOW
 
@@ -9,9 +11,11 @@ void setup() {
   Serial.begin(9600);
   pinMode(Pin_1,Mode);
   pinMode(Pin_2,Mode);
+  pinMode(Pin_3,Mode);
 
   digitalWrite(Pin_1,H_L);
   digitalWrite(Pin_2,HIGH);
+  digitalWrite(Pin_3,HIGH);
 }
 
 void loop() {

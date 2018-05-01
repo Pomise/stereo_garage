@@ -1,7 +1,7 @@
 typedef unsigned char byte;
 #define uchar unsigned char
 /*******************************NFC卡引脚定义*************************************/
-#define SS_PIN 10
+#define SS_PIN 49
 #define RST_PIN 5
 /* -----------------------------------------------------------------------------------------
  *             MFRC522      Arduino       Arduino   Arduino    Arduino          Arduino
@@ -16,34 +16,41 @@ typedef unsigned char byte;
  * SPI SCK     SCK          13 / ICSP-3   52        D13        ICSP-3           15
  *
  */
+ /******************************直流电机使能引脚定义******************************/
+ #define  Fixture_Enable 12
+ #define  Disk1_Enable 8
+ #define  Disk2_Enable 5
+ #define  Disk3_Enable 2
 /*******************************电机引脚定义位************************************/
 #define   Motor_Pause    HIGH
-#define   Disk1_motor_1  A8
-#define   Disk1_motor_2  A9
-#define   Disk2_motor_1  3
+#define   Disk1_motor_1  10
+#define   Disk1_motor_2  7
+#define   Disk2_motor_1  6
 #define   Disk2_motor_2  4
-#define   Disk3_motor_1  5
-#define   Disk3_motor_2  6
+#define   Disk3_motor_1  3
+#define   Disk3_motor_2  1
 
-#define   STEP_PIN      23
-#define   DIR_PIN       22
-#define   ENABLE_PIN    24
+#define   STEP_PIN      15
+#define   DIR_PIN       16
+#define   ENABLE_PIN    14
 #define   DIR_DIREC     LOW          //用于步进电机置方向
 #define   Speed         500
+
 /******************************限位开关引脚定义位*********************************/
-#define   Limit_Invert_Mask  LOW
-#define   Disk1_limit   A0                    
-#define   Disk2_limit   26
+#define   Disk_Limit_Mask  LOW
+#define   Limit_Invert_Mask  HIGH
+#define   Disk1_limit   23                    
+#define   Disk2_limit   25
 #define   Disk3_limit   27
-#define   Step_Limit_Max  30
-#define   Step_Limit_Second 29
-#define   Step_Limit_First  A1
-#define   Step_Limit_Min    A2
-#define   Fixture_Front_Limit   A3
-#define   Fixture_Back_Limit    A4
+#define   Step_Limit_Max  29
+#define   Step_Limit_Second 31
+#define   Step_Limit_First  33
+#define   Step_Limit_Min    35
+#define   Fixture_Front_Limit   37
+#define   Fixture_Back_Limit    39
 /*****************************夹具电机舵机引脚定位******************************/
-#define   Fixture_Motor_1  A10
-#define   Fixture_Motor_2  A11
+#define   Fixture_Motor_1  13
+#define   Fixture_Motor_2  11
 #define   Servo_PIN       9                  //需要一个能输出PWM的引脚。
 #define   Servo_Clamp_angle     180
 #define   Servo_Relax_angle    0

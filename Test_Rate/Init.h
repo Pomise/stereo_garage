@@ -1,7 +1,7 @@
 typedef unsigned char byte;
 #define uchar unsigned char
 /*******************************NFC卡引脚定义*************************************/
-#define SS_PIN 10
+#define SS_PIN 49
 #define RST_PIN 5
 /* -----------------------------------------------------------------------------------------
  *             MFRC522      Arduino       Arduino   Arduino    Arduino          Arduino
@@ -35,7 +35,9 @@ typedef unsigned char byte;
 #define   ENABLE_PIN    14
 #define   DIR_DIREC     LOW          //用于步进电机置方向
 #define   Speed         500
+
 /******************************限位开关引脚定义位*********************************/
+#define   Disk_Limit_Mask  LOW
 #define   Limit_Invert_Mask  LOW
 #define   Disk1_limit   23                    
 #define   Disk2_limit   25
