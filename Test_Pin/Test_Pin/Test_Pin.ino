@@ -1,9 +1,9 @@
 #include "Init.h"
-#define Pin_1 Disk1_motor_1
+#define Pin_1 Disk2_limit
 #define Pin_2 Disk1_motor_2
 #define Pin_3 Disk1_Enable
 #define Pin_4
-#define Mode   OUTPUT
+#define Mode   INPUT
 #define H_L    LOW
 
 void setup() {

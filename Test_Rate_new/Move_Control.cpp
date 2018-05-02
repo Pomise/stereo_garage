@@ -227,8 +227,13 @@ void Move_Up(uchar port){
   uchar Limit_Flag;                     //使用前定义。
   bool  Step_OK = false;
   bool  Ratate_OK = false;
-
-if(Limit_Need){                          //如果需要旋转车库圆盘.HIGH定义是正转（逆时针旋转）
+  Serial.print("Rate:Garage:");
+  Serial.print(Garage);
+  Serial.print("Port");
+  Serial.print(port);
+  Serial.print("Limit_Need:");
+  Serial.print(Limit_Need);
+  if(Limit_Need){                          //如果需要旋转车库圆盘.HIGH定义是正转（逆时针旋转）
     if(Limit_Need > 0){                                            //需要正向旋转。
       Limit_Num = Limit_Need*2;                                     //限位变换的次数。
       Serial.print(Limit_Num);
@@ -265,19 +270,19 @@ if(Limit_Need){                          //如果需要旋转车库圆盘.HIGH�
   Disk_Pause(Garage);                                //停止圆盘车库旋转。
   Ratate_OK = true;
 
-  digitalWrite(DIR_PIN,DIR_DIREC);         //步进电机方向控制。
-  while(1){
-    if(!Step_OK){
-      if(Can_Up(Garage)){
-        Move_Step();
-      }
-      else
-        Step_OK = true;
-    }
-    if(Step_OK)
-      break;
-    delayMicroseconds(Speed);
-   }
+//  digitalWrite(DIR_PIN,DIR_DIREC);         //步进电机方向控制。
+//  while(1){
+//    if(!Step_OK){
+//      if(Can_Up(Garage)){
+//        Move_Step();
+//      }
+//      else
+//        Step_OK = true;
+//    }
+//    if(Step_OK)
+//      break;
+//    delayMicroseconds(Speed);
+//   }
 }
 
 void Move_Down(){

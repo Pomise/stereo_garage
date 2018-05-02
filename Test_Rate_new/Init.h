@@ -58,7 +58,7 @@ typedef unsigned char byte;
 
 
 /*****************************车库数据定义位************************************/
-#define   Car_Num   4
+#define   Car_Num   20
 #define   Park_Num  2
-#define   Garage_Volume  2
+#define   Garage_Volume  10
 #define   UID_Size     4
