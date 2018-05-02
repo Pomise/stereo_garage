@@ -53,8 +53,6 @@ uchar Judge_Port(){
     if((Park_Table[i]&0x80) == 0)
       break;
   }
-  Serial.print("Plan:\ni:");
-  Serial.print(i);
   Garage = i/Garage_Volume;
   Current = Judge_Current(Garage);
   Serial.print(Current);

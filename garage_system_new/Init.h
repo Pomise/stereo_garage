@@ -34,7 +34,7 @@ typedef unsigned char byte;
 #define   DIR_PIN       16
 #define   ENABLE_PIN    14
 #define   DIR_DIREC     LOW          //用于步进电机置方向
-#define   Speed         500
+#define   Speed         250
 
 /******************************限位开关引脚定义位*********************************/
 #define   Disk_Limit_Mask  LOW             //表示被限位电平
