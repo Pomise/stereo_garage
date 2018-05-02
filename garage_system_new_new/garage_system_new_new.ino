@@ -45,11 +45,12 @@ void loop() {
         PARK = Judge_Port();          //获取应该停入的停车位。
         Serial.print(PARK);
         Record_Car_Data(PARK,CardID);      //写入存车数据,并更新停车列表
+        Record_Garage_Current(PARK);         //记录车库当前停车位变化。
         Fixture_Clamp();                   //夹具夹紧车.
+        Fixture_Back();                    //将车拖后
         Serial.print("Clamp Fixture\n");
         Move_Up(PARK);               //平台向上运动，同时相应的车库圆盘旋转。
         Serial.print("Move UP\n");
-        Record_Garage_Current(PARK);         //记录车库当前停车位变化.整个存车过程完成。
         Fixture_Front();             //当平台和车库运动完成后夹具将车送往车位。
         Serial.print("Fixture Front\n");
         Fixture_Relax();             //放松夹具。
@@ -58,6 +59,7 @@ void loop() {
         Serial.print("Fixture Back\n");
         Move_Down();                    //完成放车运动.
         Serial.print("Move Down\n");
+        Fixture_Front();
       }
       else
         Serial.print("NO PARK_PORT");
@@ -66,6 +68,7 @@ void loop() {
       Serial.print("Get Car\n");
       Clear_Port(PARK);
       Serial.print("Clear_Port\n");
+      Fixture_Back();
       Move_Up(PARK);
       Serial.print("Move_UP OK\n");
       Fixture_Front();
@@ -76,6 +79,7 @@ void loop() {
       Serial.print("Fixture back\n");
       Move_Down();
       Serial.print("Move Down\n");
+      Fixture_Front();
       Fixture_Relax();
       Record_Garage_Current(PARK);
     }
