@@ -4,11 +4,24 @@
 #include "MFRC522.h"
 #include "Move_Control.h"
 #include "Data_WR.h"
+/********************OLED**********************************/
+//#include "Wire.h"
+//#include "Adafruit_GFX.h"
+//#include "Adafruit_SSD1306.h"
+
+//#include "U8glib.h"
+//U8GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_NONE);  // I2C / TWI 
 
 /*******************定义相应的变量************************/
 byte* CardID;
 byte PARK;
 byte OFFSET=0;
+byte Empty;
+byte temp_Empty;
+byte temp_OFFSET;
+//#define OLED_Width  2
+//#define OLED_RESET 4
+//Adafruit_SSD1306 display(OLED_RESET);
 /********************************************************/
 void setup() {
   // put your setup code here, to run once:
@@ -21,19 +34,54 @@ void setup() {
   Plan_Init();
   Fixture_Back();
   Move_Down();
+  Fixture_Relax();
+
+  /****************************OLED*********************************/
+//  Empty = Empty_Num();
+//  temp_Empty = Empty;
+//  temp_OFFSET = OFFSET;
+//  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+//  display.display();
+//  delay(2000);
+//  display.clearDisplay();
+//  display.setTextSize(OLED_Width);
+//  display.setTextColor(WHITE);
+//  display.setCursor(0,0);
+//  display.print("Empty:");
+//  display.display();
+//  display.print(Empty);
+//  display.display();
+//  display.setCursor(0,20);
+//  display.print("OFFSET:");
+//  display.display();
+//  display.print(OFFSET);
+//  display.display();
+//  u8g.setFont(u8g_font_6x13);
+//  u8g.setFontRefHeightText();
+//  u8g.setFontPosTop();
+  
 }
 
 void loop() {
   while(1){
     PARK = Car_Num;                             //初始化数据，Car_Num大于最大车位编号
     MFRC522_Init();                            //打开IC卡检测
+//  display.setCursor(0,0);
+//  display.print("Empty:");
+//  display.display();
+//  display.print(Empty);
+//  display.display();
     while(1){
-      Serial.print(Empty_Num());           //输出空车数量.
       while(1){
         if(KEY_Scan()){
           OFFSET = OFFSET+10;
           if(OFFSET == 30)
-            OFFSET = 0;                    
+            OFFSET = 0; 
+//            display.setCursor(0,20);
+//            display.print("OFFSET:");
+//            display.display();
+//            display.print(OFFSET);
+//            display.display();              
         }
         if(Check_Card()){
           CardID=Get_CardID();
@@ -51,6 +99,7 @@ void loop() {
       Serial.print("Let Car\n");
       if(Judge_Can()){              //表示可以存车，开始存车运动.
         PARK = Judge_Port();          //获取应该停入的停车位。
+        Record_Car_Data(PARK,CardID);      //写入存车数据,并更新停车列表
         Serial.print(PARK);
         Fixture_Clamp();                   //夹具夹紧车.
         Fixture_Back();                    //将车拖后
@@ -65,7 +114,6 @@ void loop() {
         Serial.print("Fixture Back\n");
         Move_Down();                    //完成放车运动.
         Serial.print("Move Down\n");
-        Record_Car_Data(PARK,CardID);      //写入存车数据,并更新停车列表
         Record_Garage_Current(PARK);         //记录车库当前停车位变化。
       }
       else

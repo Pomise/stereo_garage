@@ -15,16 +15,11 @@ void Clear(){
   for(i=0;i<Car_Num;i++){
     EEPROM.write(i,i);
   }
-	for(i;i<Car_Num;i++){
-		EEPROM.write(i,i);
-	}
+
 	for(i= Car_Num;i<Car_Num+Park_Num;i++){
 		EEPROM.write(i,n*Garage_Volume);
 		n++;
 	}
- for(;i<Car_Num+Park_Num+Garage_Volume*UID_Size;i++){
-  EEPROM.write(i,0x00);
- }
 }
 
 

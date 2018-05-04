@@ -191,10 +191,11 @@ bool Can_Down(){
 /**********************************按键检测******************************************/
 bool KEY_Scan(){
   if(digitalRead(Key_Pin) == LOW){
-    delay(10);
+    delay(50);
     if(digitalRead(Key_Pin) == LOW)
       return true;
   }
+  while(digitalRead(Key_Pin) == LOW);
   return false;
 }
 
@@ -253,30 +254,30 @@ void Move_Up(uchar port){
   uchar Garage = port/Garage_Volume;
   int Limit_Need_P,Limit_Need_N,Limit_Need;                  //正向距离，反向距离，所取就近运动的需要光电变换一套的次数
   /*******************************************************************************************/
-  Limit_Need_P = port-Judge_Current(Garage);
-  Limit_Need_N = Judge_Current(Garage)-port+Garage_Volume;      //计算反向距离
-  if(Limit_Need_P!=0){                        //正向距离如果大于反向距离，则去反向距离
-    if(Limit_Need_P>0){
-      Limit_Need_N = Judge_Current(Garage)-port+Garage_Volume;
-        if(abs(Limit_Need_P)>abs(Limit_Need_N)){
-          Limit_Need = -abs(Limit_Need_N);
-        }
-        else Limit_Need = Limit_Need_P;
-    }
-    else{
-      Limit_Need_N = Judge_Current(Garage)-port-Garage_Volume;
-      if(abs(Limit_Need_P)>abs(Limit_Need_N)){
-        Limit_Need = abs(Limit_Need_N);
-      }
-      else Limit_Need = Limit_Need_P;
-    }
-  }
-  else
-     Limit_Need = 0;
+//  Limit_Need_P = port-Judge_Current(Garage);
+//  Limit_Need_N = Judge_Current(Garage)-port+Garage_Volume;      //计算反向距离
+//  if(Limit_Need_P!=0){                        //正向距离如果大于反向距离，则去反向距离
+//    if(Limit_Need_P>0){
+//      Limit_Need_N = Judge_Current(Garage)-port+Garage_Volume;
+//        if(abs(Limit_Need_P)>abs(Limit_Need_N)){
+//          Limit_Need = -abs(Limit_Need_N);
+//        }
+//        else Limit_Need = Limit_Need_P;
+//    }
+//    else{
+//      Limit_Need_N = Judge_Current(Garage)-port-Garage_Volume;
+//      if(abs(Limit_Need_P)>abs(Limit_Need_N)){
+//        Limit_Need = abs(Limit_Need_N);
+//      }
+//      else Limit_Need = Limit_Need_P;
+//    }
+//  }
+//  else
+//     Limit_Need = 0;
   /***************************************************************/
    
-//  Limit_Need = port-Judge_Current(Garage);
-  Serial.print("Limit_Need");
+  Limit_Need = port-Judge_Current(Garage);
+  Serial.print("Limit_Need:");
   Serial.print(Limit_Need);
     
 
@@ -300,8 +301,14 @@ if(Limit_Need){                          //如果需要旋转车库圆盘.HIGH�
       Disk_Move(Garage,1);
       Limit_Flag = Read_Disk_Limit(Garage);
       for(uchar i=Limit_Num;i > 0;i--){
-        while(Read_Disk_Limit(Garage) == Limit_Flag){       //知道限位状态发生变换跳出
-          delay(5);
+        while(1){       //知道限位状态发生变换跳出
+          if(Read_Disk_Limit(Garage) == !Limit_Flag){
+            delay(15);
+            if(Read_Disk_Limit(Garage) == !Limit_Flag){
+              break;
+            }
+          }
+          delay(1);
         }
         Limit_Flag = !Limit_Flag;
       }
@@ -310,12 +317,17 @@ if(Limit_Need){                          //如果需要旋转车库圆盘.HIGH�
     if(Limit_Need < 0){                                       //需要逆向旋转
       Limit_Num = abs(Limit_Need)*2;                           //需要限位变换的次数
       if(Read_Disk_Limit(Garage) == Disk_Limit_Mask){        //因为抖动或者上次是正转
-        Limit_Num--;                                         //限位变换次数减一
+        Limit_Num++;                                         //限位变换次数加一
       }
       Disk_Move(Garage,0);
       Limit_Flag = Read_Disk_Limit(Garage);
       for(uchar i=Limit_Num;i > 0;i--){
-        while(Read_Disk_Limit(Garage) == Limit_Flag){    //直到限位状态发生变换跳出
+        while(1){    //直到限位状态发生变换跳出
+          if(Read_Disk_Limit(Garage) == !Limit_Flag){
+            delay(15);
+            if(Read_Disk_Limit(Garage) == !Limit_Flag)
+              break;
+          }
           delay(5);
         }
         Limit_Flag = !Limit_Flag;
