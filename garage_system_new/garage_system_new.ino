@@ -11,13 +11,15 @@ byte PARK;
 /********************************************************/
 void setup() {
   // put your setup code here, to run once:
-  Serial.begin(115200);
+  Serial.begin(9600);
   while(!Serial);
   SPI.begin();
   Serial.print("Start:\n");
   Clear();
   Move_Init();
   Plan_Init();
+  Fixture_Back();
+  Move_Down();
 }
 
 void loop() {
@@ -36,7 +38,7 @@ void loop() {
         }
         break;
       }
-      delay(300);
+      delay(10);
     }
     PARK = Juge_UID(CardID);
     if(PARK == Car_Num){        //表示要存车
@@ -44,12 +46,10 @@ void loop() {
       if(Judge_Can()){              //表示可以存车，开始存车运动.
         PARK = Judge_Port();          //获取应该停入的停车位。
         Serial.print(PARK);
-        Record_Car_Data(PARK,CardID);      //写入存车数据,并更新停车列表
         Fixture_Clamp();                   //夹具夹紧车.
         Serial.print("Clamp Fixture\n");
         Move_Up(PARK);               //平台向上运动，同时相应的车库圆盘旋转。
         Serial.print("Move UP\n");
-        Record_Garage_Current(PARK);         //记录车库当前停车位变化.整个存车过程完成。
         Fixture_Front();             //当平台和车库运动完成后夹具将车送往车位。
         Serial.print("Fixture Front\n");
         Fixture_Relax();             //放松夹具。
@@ -57,6 +57,8 @@ void loop() {
         Fixture_Back();                 //夹具返回.
         Serial.print("Fixture Back\n");
         Move_Down();                    //完成放车运动.
+        Record_Car_Data(PARK,CardID);      //写入存车数据,并更新停车列表
+        Record_Garage_Current(PARK);         //记录车库当前停车位变化.整个存车过程完成。
         Serial.print("Move Down\n");
       }
       else
@@ -64,7 +66,6 @@ void loop() {
     }
     else{                   //表示要取车,当前PARK既是需要取车的车位.
       Serial.print("Get Car\n");
-      Clear_Port(PARK);
       Serial.print("Clear_Port\n");
       Move_Up(PARK);
       Serial.print("Move_UP OK\n");
@@ -77,9 +78,10 @@ void loop() {
       Move_Down();
       Serial.print("Move Down\n");
       Fixture_Relax();
+      Clear_Port(PARK);
       Record_Garage_Current(PARK);
     }
-    delay(1000); 
+    delay(10); 
   }
 
 }

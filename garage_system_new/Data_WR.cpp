@@ -12,8 +12,9 @@ uchar UID_Data[UID_Size];
 void Clear(){
 	uchar i;
 	uchar n=0;
-
-	for(i=0;i<Car_Num;i++){
+  for(i = 0;i<Garage_Volume;i++)
+    EEPROM.write(i,i|0x80);
+	for(i;i<Car_Num;i++){
 		EEPROM.write(i,i);
 	}
 	for(;i<Car_Num+Park_Num;i++){

@@ -255,18 +255,18 @@ void Move_Up(uchar port){
   }
   Disk_Pause(Garage);
 
-  while(1){
-    if(!Step_OK){
-      if(Can_Up(Garage)){
-        Move_Step();
-      }
-      else
-        Step_OK = true;
-    }
-    if(Step_OK)
-      break;
-    delayMicroseconds(Speed);
-   }
+//  while(1){
+//    if(!Step_OK){
+//      if(Can_Up(Garage)){
+//        Move_Step();
+//      }
+//      else
+//        Step_OK = true;
+//    }
+//    if(Step_OK)
+//      break;
+//    delayMicroseconds(Speed);
+//   }
 }
 
 void Move_Down(){

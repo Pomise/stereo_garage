@@ -10,6 +10,7 @@ void Move_Init(){
   pinMode(MIN_PIN,INPUT);
   pinMode(FRONT,INPUT);
   pinMode(BACK,INPUT);
+  pinMode(Pause,INPUT);
 
   digitalWrite(MIN_PIN,HIGH);
   digitalWrite(MAX_PIN,HIGH);
@@ -19,6 +20,7 @@ void Move_Init(){
 
   digitalWrite(FRONT,HIGH);
   digitalWrite(BACK,HIGH);
+  digitalWrite(Pause,HIGH);
 }
 
 void Move_Step(){
@@ -28,13 +30,13 @@ void Move_Step(){
 }
 
 bool Can_Front(){
-	if(digitalRead(MAX_PIN) == Limit_Invert_Mask)
+	if((digitalRead(MAX_PIN) == Limit_Invert_Mask)||(digitalRead(Pause) == Key_Invert_Mask))
 		return false;
 	return true;
 }
 
 bool Can_Back(){
-	if(digitalRead(MIN_PIN) == Limit_Invert_Mask)
+	if((digitalRead(MIN_PIN) == Limit_Invert_Mask)||(digitalRead(Pause) == Key_Invert_Mask))
 		return false;
 	return true;
 }
@@ -45,15 +47,13 @@ void Move_Front(){
     if(!Can_Front()){
       break;
     }
-    else{
       Move_Step();
       delayMicroseconds(Speed);
-    }
   }
 }
 
 void Move_Back(){
-  digitalWrite(DIR_PIN,DIR_Invert_Mask_N);
+  digitalWrite(DIR_PIN,!DIR_Invert_Mask);
   while(1){
     if(!Can_Back()){
       break;

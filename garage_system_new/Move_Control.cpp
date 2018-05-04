@@ -182,7 +182,7 @@ void Fixture_Clamp(){
     myservo.write(pos);
     delay(10);
   }
-  delay(1000);
+  delay(500);
 }
 
 void Fixture_Relax(){
@@ -190,7 +190,7 @@ void Fixture_Relax(){
   for(;pos> Servo_Relax_angle;pos--){
     myservo.write(pos);
   }
-  delay(1000);
+  delay(500);
 }
 
 void Fixture_Pause(){
@@ -205,7 +205,7 @@ void Fixture_Front(){
     delay(10);
   }
   Fixture_Pause();
-  delay(1000);
+  delay(500);
 }
 
 void Fixture_Back(){
@@ -215,7 +215,7 @@ void Fixture_Back(){
     delay(10);
   }
   Fixture_Pause();
-  delay(1000);
+  delay(500);
 }
 /********************************整体运动****************************************/
 void Move_Up(uchar port){

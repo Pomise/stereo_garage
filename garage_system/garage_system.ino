@@ -18,6 +18,8 @@ void setup() {
   Clear();
   Move_Init();
   Plan_Init();
+  Fixture_Back();
+  Move_Down();
 }
 
 void loop() {

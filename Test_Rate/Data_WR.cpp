@@ -11,12 +11,13 @@ uchar UID_Data[UID_Size];
 /********************************读取函数*****************************************/
 void Clear(){
 	uchar i;
+  uchar n=0;
 
-	for(i=0;i<Car_Num*Park_Num;i++){
+	for(i=0;i<Car_Num;i++){
 		EEPROM.write(i,i);
 	}
-	for(;i<Car_Num*Park_Num+Park_Num;i++){
-		EEPROM.write(i,0x00);
+	for(;i<Car_Num+Park_Num;i++){
+		EEPROM.write(i,n*Garage_Volume);
 	}
 }
 

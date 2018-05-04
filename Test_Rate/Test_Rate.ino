@@ -43,6 +43,7 @@ void loop() {
       Serial.print("Let Car\n");
       if(Judge_Can()){              //表示可以存车，开始存车运动.
         PARK = Judge_Port();          //获取应该停入的停车位。
+        PARK = PARK ;
         Serial.print(PARK);
         Record_Car_Data(PARK,CardID);      //写入存车数据,并更新停车列表
         //Fixture_Clamp();                   //夹具夹紧车.
